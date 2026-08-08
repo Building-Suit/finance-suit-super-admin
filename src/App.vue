@@ -121,6 +121,19 @@ async function endGrant(grantId) {
   catch (e) { error.value = e.message || "Could not end grant"; }
 }
 
+async function setBillingTestAccess(enabled) {
+  if (!selectedUser.value) return;
+  const reason = window.prompt(`${enabled ? "Enable" : "Disable"} Billing Test Access. Enter an administrative reason (at least 6 characters):`);
+  if (!reason || reason.trim().length < 6) return;
+  if (!window.confirm(`${enabled ? "Enable" : "Disable"} Billing Test Access for this user? This only exposes test checkout and does not grant Pro.`)) return;
+  submitting.value = true;
+  try {
+    await invokeAdmin("set_billing_test_access", { userId: selectedUser.value.profile.id, enabled, reason });
+    await openUser(selectedUser.value.profile);
+  } catch (e) { error.value = e.message || "Could not update Billing Test Access"; }
+  finally { submitting.value = false; }
+}
+
 async function startMonetizationCycle() {
   const reason = window.prompt("Starting the monetization cycle begins the 90-day Early Access countdown. Enter a reason to confirm:");
   if (!reason) return;
@@ -334,6 +347,10 @@ function money(row) {
             <h3>{{ selectedUser.profile?.display_name || 'User' }}</h3>
             <p><strong>Effective plan:</strong> {{ selectedUser.entitlement?.effective_plan || 'Free' }} · {{ selectedUser.entitlement?.source || 'free' }}</p>
             <p><strong>Ends:</strong> {{ selectedUser.entitlement?.ends_at || 'No expiration' }}</p>
+            <p v-if="selectedUser.billingTester?.enabled"><span class="badge good">Billing Tester</span></p>
+            <button class="icon-button" type="button" :disabled="submitting" @click="setBillingTestAccess(!selectedUser.billingTester?.enabled)">
+              {{ selectedUser.billingTester?.enabled ? 'Disable Billing Test Access' : 'Enable Billing Test Access' }}
+            </button>
             <h4>Grant Complimentary Pro</h4>
             <label>Reason <input v-model="adminReason" required minlength="6" /></label>
             <label><input v-model="grantPermanent" type="checkbox" /> Permanent</label>
