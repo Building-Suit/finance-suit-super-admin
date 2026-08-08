@@ -39,6 +39,15 @@ const campaigns = computed(() => overview.value?.campaigns || []);
 const prices = computed(() => overview.value?.prices || []);
 const provider = computed(() => overview.value?.provider || []);
 const config = computed(() => overview.value?.config || []);
+const monetization = computed(() => overview.value?.monetization || null);
+const users = ref([]);
+const selectedUser = ref(null);
+const userQuery = ref("");
+const adminReason = ref("");
+const grantPermanent = ref(true);
+const grantEndsAt = ref("");
+const submitting = ref(false);
+const auditEvents = ref([]);
 
 onMounted(async () => {
   document.documentElement.dataset.theme = theme.value;
@@ -79,6 +88,49 @@ async function loadOverview() {
   } finally {
     loading.value = false;
   }
+}
+
+async function loadUsers() {
+  loading.value = true;
+  try { const result = await invokeAdmin("users", { query: userQuery.value }); users.value = result.users; }
+  catch (e) { error.value = e.message || "Could not load users"; }
+  finally { loading.value = false; }
+}
+
+async function openUser(user) {
+  loading.value = true;
+  try { selectedUser.value = await invokeAdmin("user_detail", { userId: user.id }); }
+  catch (e) { error.value = e.message || "Could not load user"; }
+  finally { loading.value = false; }
+}
+
+async function grantPro() {
+  if (!selectedUser.value || adminReason.value.trim().length < 6) return;
+  submitting.value = true;
+  try {
+    await invokeAdmin("grant_pro", { userId: selectedUser.value.profile.id, permanent: grantPermanent.value, endsAt: grantPermanent.value ? undefined : new Date(grantEndsAt.value).toISOString(), reason: adminReason.value });
+    adminReason.value = ""; await openUser(selectedUser.value.profile);
+  } catch (e) { error.value = e.message || "Could not grant Pro"; }
+  finally { submitting.value = false; }
+}
+
+async function endGrant(grantId) {
+  const reason = window.prompt("Reason for ending this grant (at least 6 characters):");
+  if (!reason) return;
+  try { await invokeAdmin("end_grant", { grantId, reason }); await openUser(selectedUser.value.profile); }
+  catch (e) { error.value = e.message || "Could not end grant"; }
+}
+
+async function startMonetizationCycle() {
+  const reason = window.prompt("Starting the monetization cycle begins the 90-day Early Access countdown. Enter a reason to confirm:");
+  if (!reason) return;
+  try { await invokeAdmin("start_monetization_cycle", { reason }); await loadOverview(); }
+  catch (e) { error.value = e.message || "Could not start the cycle"; }
+}
+
+async function loadAudit() {
+  try { const result = await invokeAdmin("audit_log"); auditEvents.value = result.events; }
+  catch (e) { error.value = e.message || "Could not load audit log"; }
 }
 
 function toggleTheme() {
@@ -173,6 +225,16 @@ function money(row) {
       </form>
 
       <template v-if="session && overview">
+        <section v-if="activeTab === 'overview'" class="panel mode-panel">
+          <div>
+            <p class="eyebrow">Monetization mode</p>
+            <h3>{{ monetization?.mode?.replaceAll('_', ' ') || 'Unknown' }}</h3>
+            <p class="helper">Open Early Access provides Pro without a countdown or payment requirement.</p>
+          </div>
+          <button v-if="monetization?.mode === 'open_early_access'" class="primary" type="button" @click="startMonetizationCycle">
+            Start Monetization Cycle
+          </button>
+        </section>
         <section v-if="activeTab === 'overview'" class="metric-grid">
           <article class="metric">
             <HugeiconsIcon :icon="UserGroupIcon" :size="24" />
@@ -236,6 +298,7 @@ function money(row) {
             </span>
           </div>
           <p class="helper">Changing defaults affects new grants only.</p>
+          <button v-if="monetization?.mode === 'open_early_access'" class="primary" type="button" @click="startMonetizationCycle">Start Monetization Cycle</button>
         </section>
 
         <section v-if="activeTab === 'config'" class="panel">
@@ -257,12 +320,40 @@ function money(row) {
           </div>
         </section>
 
-        <section v-if="activeTab === 'users' || activeTab === 'audit'" class="panel">
-          <h3>{{ activeTab === "users" ? "Users" : "Audit Log" }}</h3>
-          <p class="helper">
-            Read/write controls stay behind the commercial-admin Edge Function.
-            Financial records are intentionally not shown here.
-          </p>
+        <section v-if="activeTab === 'users'" class="panel">
+          <h3>Users</h3>
+          <form class="inline-form" @submit.prevent="loadUsers">
+            <input v-model="userQuery" placeholder="Search by display name or user ID" />
+            <button class="primary" type="submit">Search</button>
+          </form>
+          <div v-for="user in users" :key="user.id" class="row-card clickable" @click="openUser(user)">
+            <div><strong>{{ user.display_name || 'Unnamed user' }}</strong><span>{{ user.id }}</span></div>
+            <span class="badge">View</span>
+          </div>
+          <div v-if="selectedUser" class="detail-panel">
+            <h3>{{ selectedUser.profile?.display_name || 'User' }}</h3>
+            <p><strong>Effective plan:</strong> {{ selectedUser.entitlement?.effective_plan || 'Free' }} · {{ selectedUser.entitlement?.source || 'free' }}</p>
+            <p><strong>Ends:</strong> {{ selectedUser.entitlement?.ends_at || 'No expiration' }}</p>
+            <h4>Grant Complimentary Pro</h4>
+            <label>Reason <input v-model="adminReason" required minlength="6" /></label>
+            <label><input v-model="grantPermanent" type="checkbox" /> Permanent</label>
+            <label v-if="!grantPermanent">Until date <input v-model="grantEndsAt" type="datetime-local" required /></label>
+            <button class="primary" type="button" :disabled="submitting || adminReason.trim().length < 6" @click="grantPro">Grant Complimentary Pro</button>
+            <h4>Grant history</h4>
+            <div v-for="grant in selectedUser.grants" :key="grant.id" class="row-card">
+              <div><strong>{{ grant.source }}</strong><span>{{ grant.status }} · {{ grant.ends_at || 'No expiration' }}</span></div>
+              <button v-if="grant.source === 'admin_grant' && grant.status === 'active'" class="icon-button danger" type="button" @click="endGrant(grant.id)">End grant</button>
+            </div>
+          </div>
+        </section>
+
+        <section v-if="activeTab === 'audit'" class="panel">
+          <h3>Audit Log</h3>
+          <button class="icon-button" type="button" @click="loadAudit">Load audit events</button>
+          <div v-for="event in auditEvents" :key="event.id" class="row-card">
+            <div><strong>{{ event.action }}</strong><span>{{ event.created_at }} · {{ event.reason || 'No reason recorded' }}</span></div>
+            <span class="badge">{{ event.target_type }}</span>
+          </div>
         </section>
       </template>
     </section>
