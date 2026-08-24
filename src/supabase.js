@@ -15,11 +15,22 @@ export const supabase = hasConfig
     })
   : null;
 
-export async function invokeAdmin(action, payload = {}) {
+export async function invokeAdmin(
+  action,
+  payload = {},
+  functionName = "commercial-admin",
+) {
   if (!supabase) throw new Error("Supabase config missing");
-  const { data, error } = await supabase.functions.invoke("commercial-admin", {
+  const { data, error } = await supabase.functions.invoke(functionName, {
     body: { action, ...payload },
   });
-  if (error) throw error;
+  if (error) {
+    const normalized = new Error(
+      error?.context?.body?.code || error.message || "network_error",
+    );
+    normalized.status = error?.context?.status;
+    throw normalized;
+  }
+  if (data?.code) throw new Error(data.code);
   return data;
 }

@@ -1,24 +1,17 @@
-# Step-by-step
+# Deployment checklist
 
-1. Create Play product: `finance_suit_pro`.
-2. Add monthly base plan: `pro-monthly-egp`, EGP 60.
-3. Add yearly base plan: `pro-yearly-egp`, EGP 600.
-4. Deploy Supabase migration from Finance Suit.
-5. Deploy Edge Functions:
-   `commercial-admin`, `google-play-billing`, `google-play-rtdn`.
-6. Set secrets:
-   `GOOGLE_PLAY_SERVICE_ACCOUNT_JSON`,
-   `GOOGLE_PLAY_PACKAGE_NAME`,
-   `GOOGLE_PLAY_RTDN_SHARED_SECRET`.
-7. Create your normal Supabase Auth user.
-8. Run:
-   `insert into app_commercial.platform_admins (user_id, role, status) values ('<AUTH_USER_ID>', 'super_admin', 'active');`
-9. Copy `.env.example` to `.env`.
-10. Fill `VITE_SUPABASE_URL`.
-11. Fill `VITE_SUPABASE_ANON_KEY`.
-12. Run `npm install`.
-13. Run `npm run dev`.
-14. Sign in.
-15. Verify dashboard loads.
-16. Keep Play provider status as `pending_sync` until Play matches Supabase.
-17. Mark provider synced only after real Play test purchases pass.
+1. Confirm the dashboard and authoritative Finance Suit integration branches.
+2. Apply the additive Super Admin migration after the repository's latest one.
+3. Deploy `commercial-admin`, `catalog-admin`, and `operations-admin`.
+4. Configure secrets required by the existing Google Play billing,
+   authenticated RTDN, and notification-worker documentation.
+5. Make Play products/base plans/prices match the published Finance Suit
+   commercial catalog. Do not copy prices from this document.
+6. Complete real test purchases and RTDN delivery before provider sync is ready.
+7. Bootstrap the first `super_admin` through secure SQL access.
+8. Set only `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` in the dashboard.
+9. Run `npm ci`, `npm test`, and `npm run build`.
+10. Verify auth rejection/expiry, Light/Dark/System, EN/AR RTL, Reduced Motion,
+    keyboard navigation, and the documented responsive viewports.
+11. Exercise high-impact mutations only in a safe test environment.
+12. Confirm audit events and verify no secret/private financial payload appears.
