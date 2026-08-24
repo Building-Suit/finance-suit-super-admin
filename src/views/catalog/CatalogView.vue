@@ -44,11 +44,20 @@ const title = computed(
       settings: "Catalog settings",
     })[props.section],
 );
+const pageCount = computed(() =>
+  Math.max(1, Math.ceil(count.value / filters.pageSize)),
+);
 async function load() {
   loading.value = true;
   error.value = null;
   try {
-    data.value ||= await catalogAdmin.overview();
+    rows.value = [];
+    count.value = 0;
+    if (props.section === "overview") {
+      data.value = await catalogAdmin.overview();
+    } else if (props.section === "settings") {
+      data.value = await catalogAdmin.configuration();
+    }
     const config = data.value?.configuration;
     if (config)
       Object.assign(settings, {
@@ -76,6 +85,16 @@ async function load() {
   } finally {
     loading.value = false;
   }
+}
+function previousPage() {
+  if (filters.page === 0) return;
+  filters.page -= 1;
+  load();
+}
+function nextPage() {
+  if (filters.page + 1 >= pageCount.value) return;
+  filters.page += 1;
+  load();
 }
 function intervalMinutes(value) {
   const parts = String(value || "00:30:00")
@@ -133,7 +152,12 @@ onMounted(load);
           this boundary.
         </p>
       </div>
-      <button class="button secondary" type="button" @click="load">
+      <button
+        class="button secondary"
+        type="button"
+        :disabled="loading"
+        @click="load"
+      >
         Refresh
       </button>
     </div>
@@ -149,14 +173,13 @@ onMounted(load);
         ><div class="metric-grid">
           <AppCard
             v-for="item in [
-              ['Active products', data?.summary?.active_products],
-              ['Due or stale', data?.summary?.due_or_stale],
+              ['Active products', data?.summary?.activeProducts],
+              ['Market variants', data?.summary?.marketVariants],
+              ['Countries', data?.summary?.countries],
+              ['Due or stale', data?.summary?.dueOrStale],
               ['Queued', data?.summary?.queued],
               ['Leased', data?.summary?.leased],
               ['Failed', data?.summary?.failed],
-              ['Countries', data?.summary?.countries],
-              ['Conflicts', data?.summary?.conflicts],
-              ['Unresolved', data?.summary?.unresolved],
             ]"
             :key="item[0]"
             class="metric-card"
@@ -242,6 +265,27 @@ onMounted(load);
                 </tr>
               </tbody>
             </table>
+          </div>
+          <div class="pagination">
+            <span>Page {{ filters.page + 1 }} of {{ pageCount }}</span>
+            <div class="inline-actions">
+              <button
+                class="button secondary"
+                type="button"
+                :disabled="filters.page === 0"
+                @click="previousPage"
+              >
+                Previous
+              </button>
+              <button
+                class="button secondary"
+                type="button"
+                :disabled="filters.page + 1 >= pageCount"
+                @click="nextPage"
+              >
+                Next
+              </button>
+            </div>
           </div></AppCard
         ></template
       ><template v-else-if="section === 'queue'"
@@ -309,6 +353,27 @@ onMounted(load);
                 </tr>
               </tbody>
             </table>
+          </div>
+          <div class="pagination">
+            <span>Page {{ filters.page + 1 }} of {{ pageCount }}</span>
+            <div class="inline-actions">
+              <button
+                class="button secondary"
+                type="button"
+                :disabled="filters.page === 0"
+                @click="previousPage"
+              >
+                Previous
+              </button>
+              <button
+                class="button secondary"
+                type="button"
+                :disabled="filters.page + 1 >= pageCount"
+                @click="nextPage"
+              >
+                Next
+              </button>
+            </div>
           </div></AppCard
         ></template
       ><template v-else-if="section === 'runs'"
@@ -338,6 +403,27 @@ onMounted(load);
                 </tr>
               </tbody>
             </table>
+          </div>
+          <div class="pagination">
+            <span>Page {{ filters.page + 1 }} of {{ pageCount }}</span>
+            <div class="inline-actions">
+              <button
+                class="button secondary"
+                type="button"
+                :disabled="filters.page === 0"
+                @click="previousPage"
+              >
+                Previous
+              </button>
+              <button
+                class="button secondary"
+                type="button"
+                :disabled="filters.page + 1 >= pageCount"
+                @click="nextPage"
+              >
+                Next
+              </button>
+            </div>
           </div></AppCard
         ></template
       ><template v-else

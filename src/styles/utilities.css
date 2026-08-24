@@ -1,6 +1,6 @@
 .page {
   display: grid;
-  gap: 16px;
+  gap: 12px;
 }
 .page-intro {
   display: flex;
@@ -9,7 +9,7 @@
   gap: 16px;
 }
 .page-intro h2 {
-  font-size: 22px;
+  font-size: 20px;
   margin-block-end: 2px;
 }
 .page-intro p {
@@ -20,15 +20,15 @@
   border-radius: var(--bs-radius-card);
   background: var(--bs-surface);
   box-shadow: var(--bs-shadow-1);
-  padding: 20px;
+  padding: 16px;
   min-width: 0;
 }
 .card-header {
   display: flex;
   align-items: start;
   justify-content: space-between;
-  gap: 16px;
-  margin-block-end: 16px;
+  gap: 12px;
+  margin-block-end: 12px;
 }
 .card-header h2 {
   margin: 0;
@@ -56,7 +56,7 @@
   color: var(--bs-text-muted);
 }
 .metric-card strong {
-  font-size: 28px;
+  font-size: 24px;
 }
 .metric-card small {
   color: var(--bs-text-muted);
@@ -71,7 +71,7 @@
   align-items: end;
   flex-wrap: wrap;
   gap: 10px;
-  margin-block-end: 16px;
+  margin-block-end: 12px;
 }
 .filter-bar .field {
   min-width: 150px;
@@ -88,13 +88,13 @@ table {
   min-width: 680px;
 }
 caption {
-  padding: 12px;
+  padding: 9px 10px;
   text-align: start;
   font-weight: 700;
 }
 th,
 td {
-  padding: 11px 12px;
+  padding: 8px 10px;
   border-block-end: 1px solid var(--bs-border);
   text-align: start;
   vertical-align: top;
@@ -295,7 +295,7 @@ tbody tr:last-child td {
 .tabs-inline a {
   white-space: nowrap;
   text-decoration: none;
-  padding: 9px 12px;
+  padding: 7px 10px;
   border-radius: var(--bs-radius-button);
   color: var(--bs-text-muted);
   font-weight: 600;
@@ -308,7 +308,7 @@ tbody tr:last-child td {
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
+  gap: 10px;
 }
 .form-grid .full {
   grid-column: 1/-1;
