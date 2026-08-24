@@ -1,0 +1,36 @@
+/* Vendored aliases from tareq-abdelwhap/building-suit@123166fe0eb57be31befe1543d2e356ea8247c8d
+ * .docs/building-suit-brand-guidelines/07-design-tokens/design-tokens.json */
+:root {
+  --bs-font-latin: Manrope, Inter, system-ui, sans-serif;
+  --bs-font-arabic: "IBM Plex Sans Arabic", Cairo, Tajawal, sans-serif;
+  --bs-space-1: 4px;
+  --bs-space-2: 8px;
+  --bs-space-3: 12px;
+  --bs-space-4: 16px;
+  --bs-space-5: 24px;
+  --bs-space-6: 32px;
+  --bs-space-7: 48px;
+  --bs-space-8: 64px;
+  --bs-radius-chip: 8px;
+  --bs-radius-button: 12px;
+  --bs-radius-input: 12px;
+  --bs-radius-card: 16px;
+  --bs-radius-large: 24px;
+  --bs-radius-full: 9999px;
+  --bs-duration-micro: 120ms;
+  --bs-duration-quick: 180ms;
+  --bs-duration-standard: 240ms;
+  --bs-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --bs-bg: var(--bs-background);
+  --bs-elevation-1: var(--bs-shadow-1);
+  --bs-elevation-2: var(--bs-shadow-2);
+  --bs-elevation-3: var(--bs-shadow-3);
+  --bs-status-success: var(--bs-success);
+  --bs-status-success-bg: var(--bs-success-bg);
+  --bs-status-warning: var(--bs-warning);
+  --bs-status-warning-bg: var(--bs-warning-bg);
+  --bs-status-error: var(--bs-error);
+  --bs-status-error-bg: var(--bs-error-bg);
+  --bs-status-info: var(--bs-info);
+  --bs-status-info-bg: var(--bs-info-bg);
+}

@@ -23,51 +23,56 @@
   /* ---------------------------------------------------------------- */
 
   /* Navy family */
-  --bs-building-navy: #16293B;
-  --bs-deep-structure-navy: #0D1B28;
-  --bs-midnight-background: #0A111A;
-  --bs-navy-surface: #14233A;
-  --bs-navy-surface-raised: #1B2E47;
-  --bs-steel-border: #2E3F52;
+  --bs-building-navy: #16293b;
+  --bs-deep-structure-navy: #0d1b28;
+  --bs-midnight-background: #0a111a;
+  --bs-navy-surface: #14233a;
+  --bs-navy-surface-raised: #1b2e47;
+  --bs-steel-border: #2e3f52;
 
   /* Gold family */
-  --bs-premium-gold: #D89B42;
-  --bs-highlight-gold: #EBB45A;
-  --bs-gold-700: #A86C1C;
-  --bs-gold-600: #C8902F;
-  --bs-gold-500: #D89B42;
-  --bs-gold-400: #EBB45A;
-  --bs-gold-300: #F4CE86;
+  --bs-premium-gold: #d89b42;
+  --bs-highlight-gold: #ebb45a;
+  --bs-gold-700: #a86c1c;
+  --bs-gold-600: #c8902f;
+  --bs-gold-500: #d89b42;
+  --bs-gold-400: #ebb45a;
+  --bs-gold-300: #f4ce86;
 
   /* Light / silver family */
-  --bs-pearl-white: #F7F8FA;
-  --bs-soft-silver: #E2E5EA;
-  --bs-cloud-gray: #CBD2DB;
-  --bs-white: #FFFFFF;
+  --bs-pearl-white: #f7f8fa;
+  --bs-soft-silver: #e2e5ea;
+  --bs-cloud-gray: #cbd2db;
+  --bs-white: #ffffff;
 
   /* Secondary blues */
-  --bs-slate-blue: #36506E;
-  --bs-sky-steel: #7E97B3;
-  --bs-pale-sky: #DCE6F1;
+  --bs-slate-blue: #36506e;
+  --bs-sky-steel: #7e97b3;
+  --bs-pale-sky: #dce6f1;
 
   /* Neutrals / text */
-  --bs-graphite-text: #232B33;
-  --bs-slate-gray: #5A6573;
-  --bs-steel-gray: #9AA6B4;
+  --bs-graphite-text: #232b33;
+  --bs-slate-gray: #5a6573;
+  --bs-steel-gray: #9aa6b4;
 
   /* Gradients */
-  --bs-gradient-gold: linear-gradient(135deg, #EBB45A 0%, #D89B42 50%, #A86C1C 100%);
-  --bs-gradient-navy: linear-gradient(160deg, #16293B 0%, #0D1B28 100%);
+  --bs-gradient-gold: linear-gradient(
+    135deg,
+    #ebb45a 0%,
+    #d89b42 50%,
+    #a86c1c 100%
+  );
+  --bs-gradient-navy: linear-gradient(160deg, #16293b 0%, #0d1b28 100%);
 
   /* Semantic — base (full-saturation status colors) */
-  --bs-success: #2E9E6B;
-  --bs-success-bg: #E4F4EC;
-  --bs-warning: #E1841F;
-  --bs-warning-bg: #FBEEDD;
-  --bs-error: #D14B4B;
-  --bs-error-bg: #F8E3E3;
-  --bs-info: #2F77C9;
-  --bs-info-bg: #DCE6F1;
+  --bs-success: #2e9e6b;
+  --bs-success-bg: #e4f4ec;
+  --bs-warning: #e1841f;
+  --bs-warning-bg: #fbeedd;
+  --bs-error: #d14b4b;
+  --bs-error-bg: #f8e3e3;
+  --bs-info: #2f77c9;
+  --bs-info-bg: #dce6f1;
 
   /* ---------------------------------------------------------------- */
   /* 2. ROLE TOKENS — LIGHT MODE (default)                           */
@@ -115,7 +120,7 @@
   /* Text */
   --bs-text: var(--bs-pearl-white);
   --bs-text-muted: var(--bs-sky-steel);
-  --bs-text-disabled: #4A5A6E;
+  --bs-text-disabled: #4a5a6e;
   --bs-text-on-primary: var(--bs-deep-structure-navy);
   --bs-text-on-accent: var(--bs-deep-structure-navy);
 
@@ -130,18 +135,18 @@
   --bs-focus-ring: var(--bs-highlight-gold);
 
   /* Semantic — lightened ~10–15% for dark surfaces */
-  --bs-success: #46B383;
-  --bs-success-bg: #18352A;
-  --bs-warning: #F09A3C;
-  --bs-warning-bg: #3A2A14;
-  --bs-error: #E26A6A;
-  --bs-error-bg: #3A1E1E;
-  --bs-info: #4F92DD;
-  --bs-info-bg: #15263A;
+  --bs-success: #46b383;
+  --bs-success-bg: #18352a;
+  --bs-warning: #f09a3c;
+  --bs-warning-bg: #3a2a14;
+  --bs-error: #e26a6a;
+  --bs-error-bg: #3a1e1e;
+  --bs-info: #4f92dd;
+  --bs-info-bg: #15263a;
 
   /* Elevation shadows — deeper on dark */
   --bs-shadow-1: 0 2px 8px rgba(0, 0, 0, 0.32);
-  --bs-shadow-2: 0 4px 16px rgba(0, 0, 0, 0.40);
+  --bs-shadow-2: 0 4px 16px rgba(0, 0, 0, 0.4);
   --bs-shadow-3: 0 8px 24px rgba(0, 0, 0, 0.48);
 }
 
@@ -158,7 +163,7 @@
 
     --bs-text: var(--bs-pearl-white);
     --bs-text-muted: var(--bs-sky-steel);
-    --bs-text-disabled: #4A5A6E;
+    --bs-text-disabled: #4a5a6e;
     --bs-text-on-primary: var(--bs-deep-structure-navy);
     --bs-text-on-accent: var(--bs-deep-structure-navy);
 
@@ -170,17 +175,17 @@
     --bs-link: var(--bs-sky-steel);
     --bs-focus-ring: var(--bs-highlight-gold);
 
-    --bs-success: #46B383;
-    --bs-success-bg: #18352A;
-    --bs-warning: #F09A3C;
-    --bs-warning-bg: #3A2A14;
-    --bs-error: #E26A6A;
-    --bs-error-bg: #3A1E1E;
-    --bs-info: #4F92DD;
-    --bs-info-bg: #15263A;
+    --bs-success: #46b383;
+    --bs-success-bg: #18352a;
+    --bs-warning: #f09a3c;
+    --bs-warning-bg: #3a2a14;
+    --bs-error: #e26a6a;
+    --bs-error-bg: #3a1e1e;
+    --bs-info: #4f92dd;
+    --bs-info-bg: #15263a;
 
     --bs-shadow-1: 0 2px 8px rgba(0, 0, 0, 0.32);
-    --bs-shadow-2: 0 4px 16px rgba(0, 0, 0, 0.40);
+    --bs-shadow-2: 0 4px 16px rgba(0, 0, 0, 0.4);
     --bs-shadow-3: 0 8px 24px rgba(0, 0, 0, 0.48);
   }
 }
