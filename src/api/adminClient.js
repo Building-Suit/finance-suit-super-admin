@@ -16,6 +16,9 @@ export const errorMessages = {
     "The service could not be reached. Check your connection and retry.",
   admin_operation_failed:
     "The operation failed safely. No change was confirmed.",
+  invalid_action: "This dashboard action is not supported by the server.",
+  server_misconfigured: "The admin service is missing required configuration.",
+  method_not_allowed: "The admin service rejected the request method.",
 };
 
 export function normalizeAdminError(error) {
@@ -23,6 +26,7 @@ export function normalizeAdminError(error) {
   return {
     code,
     status: error?.status,
+    requestId: error?.requestId || null,
     message: errorMessages[code] || errorMessages.admin_operation_failed,
   };
 }

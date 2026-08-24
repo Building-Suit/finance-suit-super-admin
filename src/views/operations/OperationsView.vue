@@ -53,9 +53,13 @@ async function load() {
   loading.value = true;
   error.value = null;
   try {
-    data.value = await commercialAdmin.operations();
-    if (props.section === "notifications")
+    if (props.section === "notifications") {
       health.value = await operationsAdmin.health();
+      data.value = null;
+    } else {
+      data.value = await commercialAdmin.operations();
+      health.value = null;
+    }
   } catch (value) {
     error.value = normalizeAdminError(value);
   } finally {

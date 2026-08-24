@@ -15,6 +15,25 @@ export const supabase = hasConfig
     })
   : null;
 
+export async function normalizeFunctionError(error) {
+  const response = error?.context;
+  let payload = null;
+  if (response && typeof response.clone === "function") {
+    try {
+      payload = await response.clone().json();
+    } catch {
+      payload = null;
+    }
+  }
+  const code =
+    payload?.code || error?.code || error?.message || "network_error";
+  const normalized = new Error(code);
+  normalized.code = code;
+  normalized.status = response?.status ?? error?.status;
+  normalized.requestId = payload?.requestId || null;
+  return normalized;
+}
+
 export async function invokeAdmin(
   action,
   payload = {},
@@ -25,11 +44,7 @@ export async function invokeAdmin(
     body: { action, ...payload },
   });
   if (error) {
-    const normalized = new Error(
-      error?.context?.body?.code || error.message || "network_error",
-    );
-    normalized.status = error?.context?.status;
-    throw normalized;
+    throw await normalizeFunctionError(error);
   }
   if (data?.code) throw new Error(data.code);
   return data;

@@ -4,6 +4,7 @@ const call = (action, payload = {}, options = {}) =>
   adminRequest(action, payload, { functionName: "catalog-admin", ...options });
 export const catalogAdmin = {
   overview: () => call("overview", {}, { dedupe: false }),
+  configuration: () => call("configuration", {}, { dedupe: false }),
   products: (filters) => call("products", filters),
   productDetail: (productId) => call("product_detail", { productId }),
   queue: (filters) => call("queue", filters),
